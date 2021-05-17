@@ -27,3 +27,11 @@ manifest_additional:
  - include pyunicodedata/unicodetype_index.json
 
 pre_commit_exclude: "^pyunicodedata/_unicode.*$"
+
+keywords:
+ - unicode
+
+classifiers:
+ - 'Development Status :: 3 - Alpha'
+ - 'Intended Audience :: Developers'
+ - 'Topic :: Software Development :: Libraries :: Python Modules'

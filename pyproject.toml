@@ -7,7 +7,7 @@ name = "pyunicodedata"
 version = "0.0.0"
 description = "Pure-python implementation of some unicodedata functions."
 readme = "README.rst"
-keywords = []
+keywords = [ "unicode",]
 dynamic = [ "requires-python", "classifiers", "dependencies",]
 
 [[project.authors]]
@@ -29,7 +29,11 @@ extras = "all"
 license-key = "PSF"
 
 [tool.whey]
-base-classifiers = []
+base-classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
 python-versions = [ "3.8", "3.9",]
 python-implementations = [ "CPython",]
 platforms = [ "Windows", "macOS", "Linux",]
