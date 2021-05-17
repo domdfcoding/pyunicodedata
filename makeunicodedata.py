@@ -235,7 +235,7 @@ def makeunicodedata(unicode, trace):
 			if record.decomposition_type:
 				decomp = record.decomposition_type.split()
 				if len(decomp) > 19:
-					raise Exception("character %x has a decomposition too large for nfd_nfkd" % char)
+					raise Exception(f"character {char:x} has a decomposition too large for nfd_nfkd")
 				# prefix
 				if decomp[0][0] == '<':
 					prefix = decomp.pop(0)
@@ -251,9 +251,10 @@ def makeunicodedata(unicode, trace):
 				# content
 				decomp = [prefix + (len(decomp) << 8)] + [int(s, 16) for s in decomp]
 				# Collect NFC pairs
-				if not prefix and len(decomp) == 3 and \
-                   char not in unicode.exclusions and \
-                   unicode.table[decomp[1]].canonical_combining_class == '0':
+				if (
+						not prefix and len(decomp) == 3 and char not in unicode.exclusions
+						and unicode.table[decomp[1]].canonical_combining_class == '0'
+						):
 					p, l, r = decomp
 					comp_first[l] = 1
 					comp_last[r] = 1
@@ -333,12 +334,12 @@ def makeunicodedata(unicode, trace):
 		fprint("struct reindex{int start;short count,index;};")
 		fprint("static struct reindex nfc_first[] = {")
 		for start, end in comp_first_ranges:
-			fprint("    { %d, %d, %d}," % (start, end - start, comp_first[start]))
+			fprint(f"    {{ {start:d}, {end - start:d}, {comp_first[start]:d}}},")
 		fprint("    {0,0,0}")
 		fprint("};\n")
 		fprint("static struct reindex nfc_last[] = {")
 		for start, end in comp_last_ranges:
-			fprint("  { %d, %d, %d}," % (start, end - start, comp_last[start]))
+			fprint(f"  {{ {start:d}, {end - start:d}, {comp_last[start]:d}}},")
 		fprint("  {0,0,0}")
 		fprint("};\n")
 
@@ -348,25 +349,25 @@ def makeunicodedata(unicode, trace):
 		fprint("/* string literals */")
 		fprint("const char *_PyUnicode_CategoryNames[] = {")
 		for name in CATEGORY_NAMES:
-			fprint('    "%s",' % name)
+			fprint(f'    "{name}",')
 		fprint("    NULL")
 		fprint("};")
 
 		fprint("const char *_PyUnicode_BidirectionalNames[] = {")
 		for name in BIDIRECTIONAL_NAMES:
-			fprint('    "%s",' % name)
+			fprint(f'    "{name}",')
 		fprint("    NULL")
 		fprint("};")
 
 		fprint("const char *_PyUnicode_EastAsianWidthNames[] = {")
 		for name in EASTASIANWIDTH_NAMES:
-			fprint('    "%s",' % name)
+			fprint(f'    "{name}",')
 		fprint("    NULL")
 		fprint("};")
 
 		fprint("static const char *decomp_prefix[] = {")
 		for name in decomp_prefix:
-			fprint('    "%s",' % name)
+			fprint(f'    "{name}",')
 		fprint("    NULL")
 		fprint("};")
 
@@ -408,24 +409,23 @@ def makeunicodedata(unicode, trace):
 					index[i] = cache[record] = len(records)
 					records.append(record)
 			index1, index2, shift = splitbins(index, trace)
-			fprint("static const change_record change_records_%s[] = {" % cversion)
+			fprint(f"static const change_record change_records_{cversion}[] = {{")
 			for record in records:
-				fprint("    { %s }," % ", ".join(map(str, record)))
+				fprint(f"    {{ {', '.join(map(str, record))} }},")
 			fprint("};")
-			Array("changes_%s_index" % cversion, index1).dump(fp, trace)
-			Array("changes_%s_data" % cversion, index2).dump(fp, trace)
-			fprint("static const change_record* get_change_%s(Py_UCS4 n)" % cversion)
+			Array(f"changes_{cversion}_index", index1).dump(fp, trace)
+			Array(f"changes_{cversion}_data", index2).dump(fp, trace)
+			fprint(f"static const change_record* get_change_{cversion}(Py_UCS4 n)")
 			fprint('{')
 			fprint("    int index;")
 			fprint("    if (n >= 0x110000) index = 0;")
 			fprint("    else {")
-			fprint("        index = changes_%s_index[n>>%d];" % (cversion, shift))
-			fprint("        index = changes_%s_data[(index<<%d)+(n & %d)];" % \
-                   (cversion, shift, ((1<<shift)-1)))
+			fprint(f"        index = changes_{cversion}_index[n>>{shift:d}];")
+			fprint(f"        index = changes_{cversion}_data[(index<<{shift:d})+(n & {((1 << shift) - 1):d})];")
 			fprint("    }")
-			fprint("    return change_records_%s+index;" % cversion)
+			fprint(f"    return change_records_{cversion}+index;")
 			fprint("}\n")
-			fprint("static Py_UCS4 normalization_%s(Py_UCS4 n)" % cversion)
+			fprint(f"static Py_UCS4 normalization_{cversion}(Py_UCS4 n)")
 			fprint('{')
 			fprint("    switch(n) {")
 			for k, v in normalization:
@@ -819,12 +819,12 @@ def makeunicodename(unicode, trace):
 		codehash.dump(fp, trace)
 
 		fprint()
-		fprint("static const unsigned int aliases_start = %#x;" % NAME_ALIASES_START)
-		fprint("static const unsigned int aliases_end = %#x;" % (NAME_ALIASES_START + len(unicode.aliases)))
+		fprint(f"static const unsigned int aliases_start = {NAME_ALIASES_START:#x};")
+		fprint(f"static const unsigned int aliases_end = {NAME_ALIASES_START + len(unicode.aliases):#x};")
 
 		fprint("static const unsigned int name_aliases[] = {")
 		for name, codepoint in unicode.aliases:
-			fprint("    0x%04X," % codepoint)
+			fprint(f"    0x{codepoint:04X},")
 		fprint("};")
 
 		# In Unicode 6.0.0, the sequences contain at most 4 BMP chars,
@@ -842,16 +842,15 @@ def makeunicodename(unicode, trace):
 						)
 				)
 
-		fprint("static const unsigned int named_sequences_start = %#x;" % NAMED_SEQUENCES_START)
+		fprint(f"static const unsigned int named_sequences_start = {NAMED_SEQUENCES_START:#x};")
 		fprint(
-				"static const unsigned int named_sequences_end = %#x;" %
-				(NAMED_SEQUENCES_START + len(unicode.named_sequences))
+				f"static const unsigned int named_sequences_end = {NAMED_SEQUENCES_START + len(unicode.named_sequences):#x};"
 				)
 
 		fprint("static const named_sequence named_sequences[] = {")
 		for name, sequence in unicode.named_sequences:
-			seq_str = ", ".join("0x%04X" % cp for cp in sequence)
-			fprint("    {%d, {%s}}," % (len(sequence), seq_str))
+			seq_str = ", ".join(f"0x{cp:04X}" for cp in sequence)
+			fprint(f"    {{{len(sequence):d}, {{{seq_str}}}}},")
 		fprint("};")
 
 
@@ -970,9 +969,9 @@ def open_data(template, version):
 		import urllib.request
 		if version == "3.2.0":
 			# irregular url structure
-			url = ("https://www.unicode.org/Public/3.2-Update/" + template) % ('-' + version, )
+			url = f"{('https://www.unicode.org/Public/3.2-Update/' + template)}{('-' + version,)}"
 		else:
-			url = ("https://www.unicode.org/Public/%s/ucd/" + template) % (version, '')
+			url = f"{('https://www.unicode.org/Public/%s/ucd/' + template)}{(version, '')}"
 		os.makedirs(DATA_DIR, exist_ok=True)
 		urllib.request.urlretrieve(url, filename=local)
 	if local.endswith(".txt"):
@@ -1101,9 +1100,9 @@ class UnicodeData:
 					s.name = ''
 					field = None
 			elif field:
-				table[i] = from_row(("%X" % i, ) + field[1:])
+				table[i] = from_row((f"{i:X}", ) + field[1:])
 		if cjk_check and cjk_ranges != cjk_ranges_found:
-			raise ValueError("CJK ranges deviate: have %r" % cjk_ranges_found)
+			raise ValueError(f"CJK ranges deviate: have {cjk_ranges_found!r}")
 
 		# public attributes
 		self.filename = UNICODE_DATA % ''
@@ -1319,9 +1318,9 @@ class Hash:
 	def dump(self, file, trace):
 		# write data to file, as a C array
 		self.data.dump(file, trace)
-		file.write("#define %s_magic %d\n" % (self.name, self.magic))
-		file.write("#define %s_size %d\n" % (self.name, self.size))
-		file.write("#define %s_poly %d\n" % (self.name, self.poly))
+		file.write(f"#define {self.name}_magic {self.magic:d}\n")
+		file.write(f"#define {self.name}_size {self.size:d}\n")
+		file.write(f"#define {self.name}_poly {self.poly:d}\n")
 
 
 # stuff to deal with arrays of unsigned integers
@@ -1389,7 +1388,7 @@ def splitbins(t, trace=0):
 	if trace:
 
 		def dump(t1, t2, shift, bytes):
-			print("%d+%d bins at shift %d; %d bytes" % (len(t1), len(t2), shift, bytes), file=sys.stderr)
+			print(f"{len(t1):d}+{len(t2):d} bins at shift {shift:d}; {bytes:d} bytes", file=sys.stderr)
 
 		print("Size of original table:", len(t) * getsize(t), "bytes", file=sys.stderr)
 	n = len(t) - 1  # last valid index

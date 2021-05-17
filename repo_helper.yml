@@ -25,3 +25,5 @@ manifest_additional:
  - include pyunicodedata/unicodetype_db.h
  - include pyunicodedata/unicodetype_db.json
  - include pyunicodedata/unicodetype_index.json
+
+pre_commit_exclude: "^pyunicodedata/_unicode.*$"
