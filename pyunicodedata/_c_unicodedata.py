@@ -108,7 +108,7 @@ def _PyUnicode_IsDecimalDigit(ch):
 
 def _PyUnicode_ToDigit(ch):
 	"""
-	Returns the integer digit (0-9) for Unicode characters having this property, -1 otherwise
+	Returns the integer digit (0-9) for Unicode characters having this property, -1 otherwise.
 
 	:param ch:
 	:return:
@@ -161,7 +161,7 @@ def _PyUnicode_ToNumeric(ch: str):
 
 
 def _PyUnicode_IsPrintable(ch):
-	"""
+	r"""
 	Returns 1 for Unicode characters to be hex-escaped when repr()ed, 0 otherwise.
 
 	All characters except those characters defined in the Unicode character

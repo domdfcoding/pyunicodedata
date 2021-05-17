@@ -31,7 +31,7 @@ __all__ = ["decimal", "digit", "numeric"]
 MISSING = object()
 
 
-def decimal(chr: str, default=MISSING):
+def decimal(chr: str, default=MISSING):  # noqa: A002
 	"""
 	Returns the decimal value assigned to the character chr as integer.
 
@@ -54,7 +54,7 @@ def decimal(chr: str, default=MISSING):
 	return rc
 
 
-def digit(chr: str, default=MISSING):
+def digit(chr: str, default=MISSING):  # noqa: A002
 	"""
 	Returns the digit value assigned to the character chr as integer.
 
@@ -75,7 +75,7 @@ def digit(chr: str, default=MISSING):
 	return rc
 
 
-def numeric(chr: str, default=MISSING):
+def numeric(chr: str, default=MISSING):  # noqa: A002
 	"""
 	Returns the numeric value assigned to the character chr as float.
 

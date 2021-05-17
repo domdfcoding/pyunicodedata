@@ -338,17 +338,17 @@ class NormalizationTest(unittest.TestCase):
 		part = None
 		part1_data = {}
 
-		def NFC(str):
-			return unicodedata.normalize("NFC", str)
+		def NFC(string):
+			return unicodedata.normalize("NFC", string)
 
-		def NFKC(str):
-			return unicodedata.normalize("NFKC", str)
+		def NFKC(string):
+			return unicodedata.normalize("NFKC", string)
 
-		def NFD(str):
-			return unicodedata.normalize("NFD", str)
+		def NFD(string):
+			return unicodedata.normalize("NFD", string)
 
-		def NFKD(str):
-			return unicodedata.normalize("NFKD", str)
+		def NFKD(string):
+			return unicodedata.normalize("NFKD", string)
 
 		for line in testdata:
 			if '#' in line:
