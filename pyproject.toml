@@ -1,0 +1,51 @@
+[build-system]
+requires = [ "whey", "whey-pth",]
+build-backend = "whey"
+
+[project]
+name = "pyunicodedata"
+version = "0.0.0"
+description = "Pure-python implementation of some unicodedata functions."
+readme = "README.rst"
+keywords = []
+dynamic = [ "requires-python", "classifiers", "dependencies",]
+
+[[project.authors]]
+name = "Dominic Davis-Foster"
+email = "dominic@davis-foster.co.uk"
+
+
+[project.license]
+file = "LICENSE"
+
+[project.urls]
+Homepage = "https://github.com/domdfcoding/pyunicodedata"
+"Issue Tracker" = "https://github.com/domdfcoding/pyunicodedata/issues"
+"Source Code" = "https://github.com/domdfcoding/pyunicodedata"
+
+[tool.mkrecipe]
+conda-channels = [ "domdfcoding",]
+extras = "all"
+license-key = "PSF"
+
+[tool.whey]
+base-classifiers = []
+python-versions = [ "3.8", "3.9",]
+python-implementations = [ "CPython",]
+platforms = [ "Windows", "macOS", "Linux",]
+license-key = "PSF-2.0"
+additional-files = [
+    "include pyunicodedata/unicode_numeric.json",
+    "include pyunicodedata/unicodedata_db.h",
+    "include pyunicodedata/unicodename_db.h",
+    "include pyunicodedata/unicodetype_db.h",
+    "include pyunicodedata/unicodetype_db.json",
+    "include pyunicodedata/unicodetype_index.json",
+]
+
+[tool.whey-pth]
+name = "pyunicodedata.pth"
+pth-content = "import pyunicodedata; pyunicodedata.install_patch()"
+
+[tool.whey.builders]
+wheel = "whey_pth_wheel"

@@ -1,0 +1,27 @@
+# Configuration for 'repo_helper' (https://github.com/repo-helper/repo_helper)
+---
+modname: 'pyunicodedata'
+copyright_years: '2021'
+author: 'Dominic Davis-Foster'
+email: 'dominic@davis-foster.co.uk'
+username: 'domdfcoding'
+version: '0.0.0'
+license: 'PSF-2.0'
+short_desc: 'Pure-python implementation of some unicodedata functions.'
+
+use_whey: true
+enable_conda: false
+enable_docs: false
+
+python_versions:
+ - 3.8
+ - 3.9
+ - 3.10-dev
+
+manifest_additional:
+ - include pyunicodedata/unicode_numeric.json
+ - include pyunicodedata/unicodedata_db.h
+ - include pyunicodedata/unicodename_db.h
+ - include pyunicodedata/unicodetype_db.h
+ - include pyunicodedata/unicodetype_db.json
+ - include pyunicodedata/unicodetype_index.json
