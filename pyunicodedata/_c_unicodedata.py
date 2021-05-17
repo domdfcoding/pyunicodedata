@@ -15,9 +15,10 @@ Parts of unicodedata based on CPython C source code.
 #  See the LICENSE file for details.
 #
 
+# this package
+from ._unicode_numeric import numeric_items
 from ._unicodetype_db import data
 from ._unicodetype_index import index
-from ._unicode_numeric import numeric_items
 
 ALPHA_MASK = 0x01
 DECIMAL_MASK = 0x02

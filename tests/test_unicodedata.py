@@ -236,14 +236,11 @@ class UnicodeMiscTest(UnicodeDatabaseTest):
 		# imported, we shouldn't segfault.
 
 		# This program should raise a SyntaxError in the eval.
-		code = "import sys;" \
-            "sys.modules['unicodedata'] = None;" \
-            """eval("'\\\\N{SOFT HYPHEN}'")"""
+		code = "import sys;sys.modules['unicodedata'] = None;eval(\"'\\\\N{SOFT HYPHEN}'\")"
 		# We use a separate process because the unicodedata module may already
 		# have been loaded in this process.
 		result = script_helper.assert_python_failure("-c", code)
-		error = "SyntaxError: (unicode error) \\N escapes not supported " \
-            "(can't load unicodedata module)"
+		error = "SyntaxError: (unicode error) \\N escapes not supported (can't load unicodedata module)"
 		self.assertIn(error, result.err.decode("ascii"))
 
 	def test_decimal_numeric_consistent(self):
@@ -370,12 +367,8 @@ class NormalizationTest(unittest.TestCase):
 			self.assertTrue(c4 == NFC(c4) == NFC(c5), line)
 			self.assertTrue(c3 == NFD(c1) == NFD(c2) == NFD(c3), line)
 			self.assertTrue(c5 == NFD(c4) == NFD(c5), line)
-			self.assertTrue(c4 == NFKC(c1) == NFKC(c2) == \
-                            NFKC(c3) == NFKC(c4) == NFKC(c5),
-							line)
-			self.assertTrue(c5 == NFKD(c1) == NFKD(c2) == \
-                            NFKD(c3) == NFKD(c4) == NFKD(c5),
-							line)
+			self.assertTrue(c4 == NFKC(c1) == NFKC(c2) == NFKC(c3) == NFKC(c4) == NFKC(c5), line)
+			self.assertTrue(c5 == NFKD(c1) == NFKD(c2) == NFKD(c3) == NFKD(c4) == NFKD(c5), line)
 
 			self.assertTrue(unicodedata.is_normalized("NFC", c2))
 			self.assertTrue(unicodedata.is_normalized("NFC", c4))
