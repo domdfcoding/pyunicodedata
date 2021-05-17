@@ -23,7 +23,7 @@ class UnicodeMethodsTest(unittest.TestCase):
 	@unittest.expectedFailure
 	@requires_resource("cpu")
 	def test_method_checksum(self):
-		h = hashlib.sha1()
+		h = hashlib.sha1()  # nosec: B303
 		for i in range(sys.maxunicode + 1):
 			char = chr(i)
 			data = [
@@ -78,8 +78,7 @@ class UnicodeFunctionsTest(UnicodeDatabaseTest):
 	@unittest.expectedFailure
 	@requires_resource("cpu")
 	def test_function_checksum(self):
-		data = []
-		h = hashlib.sha1()
+		h = hashlib.sha1()  # nosec: B303
 
 		for i in range(sys.maxunicode + 1):
 			char = chr(i)
