@@ -38,3 +38,4 @@ classifiers:
 
 tox_unmanaged:
  - flake8
+ - testenv
