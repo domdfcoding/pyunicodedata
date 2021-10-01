@@ -46,8 +46,8 @@ pyunicodedata
 	:target: https://github.com/domdfcoding/pyunicodedata/actions?query=workflow%3A%22mypy%22
 	:alt: mypy status
 
-.. |requires| image:: https://requires.io/github/domdfcoding/pyunicodedata/requirements.svg?branch=master
-	:target: https://requires.io/github/domdfcoding/pyunicodedata/requirements/?branch=master
+.. |requires| image:: https://dependency-dash.herokuapp.com/github/domdfcoding/pyunicodedata/badge.svg
+	:target: https://dependency-dash.herokuapp.com/github/domdfcoding/pyunicodedata/
 	:alt: Requirements Status
 
 .. |coveralls| image:: https://img.shields.io/coveralls/github/domdfcoding/pyunicodedata/master?logo=coveralls
