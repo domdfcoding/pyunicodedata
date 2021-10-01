@@ -1,18 +1,23 @@
 """ Tests for the unicodedata module.
 
-    Written by Marc-Andre Lemburg (mal@lemburg.com).
+	Written by Marc-Andre Lemburg (mal@lemburg.com).
 
-    (c) Copyright CNRI, All Rights Reserved. NO WARRANTY.
+	(c) Copyright CNRI, All Rights Reserved. NO WARRANTY.
 
 """
 
 # stdlib
 import hashlib
 import sys
+import test.support  # type: ignore[import]
 import unicodedata
 import unittest
+import urllib.parse
+import urllib.request
 from http.client import HTTPException
-from test.support import cpython_only, open_urlresource, requires_resource, script_helper
+
+# 3rd party
+from domdf_python_tools.paths import TemporaryPathPlus
 
 
 class UnicodeMethodsTest(unittest.TestCase):
@@ -21,7 +26,7 @@ class UnicodeMethodsTest(unittest.TestCase):
 	expectedchecksum = "fbdf8106a3c7c242086b0a9efa03ad4d30d5b85d"
 
 	@unittest.expectedFailure
-	@requires_resource("cpu")
+	@test.support.requires_resource("cpu")
 	def test_method_checksum(self):
 		h = hashlib.sha1()  # nosec: B303
 		for i in range(sys.maxunicode + 1):
@@ -65,18 +70,14 @@ class UnicodeMethodsTest(unittest.TestCase):
 		self.assertEqual(result, self.expectedchecksum)
 
 
-class UnicodeDatabaseTest(unittest.TestCase):
-	db = unicodedata
-
-
-class UnicodeFunctionsTest(UnicodeDatabaseTest):
+class UnicodeFunctionsTest(unittest.TestCase):
 
 	# Update this if the database changes. Make sure to do a full rebuild
 	# (e.g. 'make distclean && make') to get the correct checksum.
 	expectedchecksum = "d1e37a2854df60ac607b47b51189b9bf1b54bfdb"
 
 	@unittest.expectedFailure
-	@requires_resource("cpu")
+	@test.support.requires_resource("cpu")
 	def test_function_checksum(self):
 		h = hashlib.sha1()  # nosec: B303
 
@@ -84,112 +85,112 @@ class UnicodeFunctionsTest(UnicodeDatabaseTest):
 			char = chr(i)
 			data = [
 					# Properties
-					format(self.db.digit(char, -1), ".12g"),
-					format(self.db.numeric(char, -1), ".12g"),
-					format(self.db.decimal(char, -1), ".12g"),
-					self.db.category(char),
-					self.db.bidirectional(char),
-					self.db.decomposition(char),
-					str(self.db.mirrored(char)),
-					str(self.db.combining(char)),
+					format(unicodedata.digit(char, -1), ".12g"),
+					format(unicodedata.numeric(char, -1), ".12g"),
+					format(unicodedata.decimal(char, -1), ".12g"),
+					unicodedata.category(char),
+					unicodedata.bidirectional(char),
+					unicodedata.decomposition(char),
+					str(unicodedata.mirrored(char)),
+					str(unicodedata.combining(char)),
 					]
 			h.update(''.join(data).encode("ascii"))
 		result = h.hexdigest()
 		self.assertEqual(result, self.expectedchecksum)
 
 	def test_digit(self):
-		self.assertEqual(self.db.digit('A', None), None)
-		self.assertEqual(self.db.digit('9'), 9)
-		self.assertEqual(self.db.digit('⅛', None), None)
-		self.assertEqual(self.db.digit('⑨'), 9)
-		self.assertEqual(self.db.digit('𠀀', None), None)
-		self.assertEqual(self.db.digit('𝟽'), 7)
+		self.assertEqual(unicodedata.digit('A', None), None)
+		self.assertEqual(unicodedata.digit('9'), 9)
+		self.assertEqual(unicodedata.digit('⅛', None), None)
+		self.assertEqual(unicodedata.digit('⑨'), 9)
+		self.assertEqual(unicodedata.digit('𠀀', None), None)
+		self.assertEqual(unicodedata.digit('𝟽'), 7)
 
-		self.assertRaises(TypeError, self.db.digit)
-		self.assertRaises(TypeError, self.db.digit, "xx")
-		self.assertRaises(ValueError, self.db.digit, 'x')
+		self.assertRaises(TypeError, unicodedata.digit)
+		self.assertRaises(TypeError, unicodedata.digit, "xx")
+		self.assertRaises(ValueError, unicodedata.digit, 'x')
 
 	def test_numeric(self):
-		self.assertEqual(self.db.numeric('A', None), None)
-		self.assertEqual(self.db.numeric('9'), 9)
-		self.assertEqual(self.db.numeric('⅛'), 0.125)
-		self.assertEqual(self.db.numeric('⑨'), 9.0)
-		self.assertEqual(self.db.numeric('꘧'), 7.0)
-		self.assertEqual(self.db.numeric('𠀀', None), None)
-		self.assertEqual(self.db.numeric('𐄪'), 9000)
+		self.assertEqual(unicodedata.numeric('A', None), None)
+		self.assertEqual(unicodedata.numeric('9'), 9)
+		self.assertEqual(unicodedata.numeric('⅛'), 0.125)
+		self.assertEqual(unicodedata.numeric('⑨'), 9.0)
+		self.assertEqual(unicodedata.numeric('꘧'), 7.0)
+		self.assertEqual(unicodedata.numeric('𠀀', None), None)
+		self.assertEqual(unicodedata.numeric('𐄪'), 9000)
 
-		self.assertRaises(TypeError, self.db.numeric)
-		self.assertRaises(TypeError, self.db.numeric, "xx")
-		self.assertRaises(ValueError, self.db.numeric, 'x')
+		self.assertRaises(TypeError, unicodedata.numeric)
+		self.assertRaises(TypeError, unicodedata.numeric, "xx")
+		self.assertRaises(ValueError, unicodedata.numeric, 'x')
 
 	def test_decimal(self):
-		self.assertEqual(self.db.decimal('A', None), None)
-		self.assertEqual(self.db.decimal('9'), 9)
-		self.assertEqual(self.db.decimal('⅛', None), None)
-		self.assertEqual(self.db.decimal('⑨', None), None)
-		self.assertEqual(self.db.decimal('𠀀', None), None)
-		self.assertEqual(self.db.decimal('𝟽'), 7)
+		self.assertEqual(unicodedata.decimal('A', None), None)
+		self.assertEqual(unicodedata.decimal('9'), 9)
+		self.assertEqual(unicodedata.decimal('⅛', None), None)
+		self.assertEqual(unicodedata.decimal('⑨', None), None)
+		self.assertEqual(unicodedata.decimal('𠀀', None), None)
+		self.assertEqual(unicodedata.decimal('𝟽'), 7)
 
-		self.assertRaises(TypeError, self.db.decimal)
-		self.assertRaises(TypeError, self.db.decimal, "xx")
-		self.assertRaises(ValueError, self.db.decimal, 'x')
+		self.assertRaises(TypeError, unicodedata.decimal)
+		self.assertRaises(TypeError, unicodedata.decimal, "xx")
+		self.assertRaises(ValueError, unicodedata.decimal, 'x')
 
 	def test_category(self):
-		self.assertEqual(self.db.category('\ufffe'), "Cn")
-		self.assertEqual(self.db.category('a'), "Ll")
-		self.assertEqual(self.db.category('A'), "Lu")
-		self.assertEqual(self.db.category('𠀀'), "Lo")
-		self.assertEqual(self.db.category('𐄪'), "No")
+		self.assertEqual(unicodedata.category('\ufffe'), "Cn")
+		self.assertEqual(unicodedata.category('a'), "Ll")
+		self.assertEqual(unicodedata.category('A'), "Lu")
+		self.assertEqual(unicodedata.category('𠀀'), "Lo")
+		self.assertEqual(unicodedata.category('𐄪'), "No")
 
-		self.assertRaises(TypeError, self.db.category)
-		self.assertRaises(TypeError, self.db.category, "xx")
+		self.assertRaises(TypeError, unicodedata.category)
+		self.assertRaises(TypeError, unicodedata.category, "xx")
 
 	def test_bidirectional(self):
-		self.assertEqual(self.db.bidirectional('\ufffe'), '')
-		self.assertEqual(self.db.bidirectional(' '), "WS")
-		self.assertEqual(self.db.bidirectional('A'), 'L')
-		self.assertEqual(self.db.bidirectional('𠀀'), 'L')
+		self.assertEqual(unicodedata.bidirectional('\ufffe'), '')
+		self.assertEqual(unicodedata.bidirectional(' '), "WS")
+		self.assertEqual(unicodedata.bidirectional('A'), 'L')
+		self.assertEqual(unicodedata.bidirectional('𠀀'), 'L')
 
-		self.assertRaises(TypeError, self.db.bidirectional)
-		self.assertRaises(TypeError, self.db.bidirectional, "xx")
+		self.assertRaises(TypeError, unicodedata.bidirectional)
+		self.assertRaises(TypeError, unicodedata.bidirectional, "xx")
 
 	def test_decomposition(self):
-		self.assertEqual(self.db.decomposition('\ufffe'), '')
-		self.assertEqual(self.db.decomposition('¼'), "<fraction> 0031 2044 0034")
+		self.assertEqual(unicodedata.decomposition('\ufffe'), '')
+		self.assertEqual(unicodedata.decomposition('¼'), "<fraction> 0031 2044 0034")
 
-		self.assertRaises(TypeError, self.db.decomposition)
-		self.assertRaises(TypeError, self.db.decomposition, "xx")
+		self.assertRaises(TypeError, unicodedata.decomposition)
+		self.assertRaises(TypeError, unicodedata.decomposition, "xx")
 
 	def test_mirrored(self):
-		self.assertEqual(self.db.mirrored('\ufffe'), 0)
-		self.assertEqual(self.db.mirrored('a'), 0)
-		self.assertEqual(self.db.mirrored('∁'), 1)
-		self.assertEqual(self.db.mirrored('𠀀'), 0)
+		self.assertEqual(unicodedata.mirrored('\ufffe'), 0)
+		self.assertEqual(unicodedata.mirrored('a'), 0)
+		self.assertEqual(unicodedata.mirrored('∁'), 1)
+		self.assertEqual(unicodedata.mirrored('𠀀'), 0)
 
-		self.assertRaises(TypeError, self.db.mirrored)
-		self.assertRaises(TypeError, self.db.mirrored, "xx")
+		self.assertRaises(TypeError, unicodedata.mirrored)
+		self.assertRaises(TypeError, unicodedata.mirrored, "xx")
 
 	def test_combining(self):
-		self.assertEqual(self.db.combining('\ufffe'), 0)
-		self.assertEqual(self.db.combining('a'), 0)
-		self.assertEqual(self.db.combining('⃡'), 230)
-		self.assertEqual(self.db.combining('𠀀'), 0)
+		self.assertEqual(unicodedata.combining('\ufffe'), 0)
+		self.assertEqual(unicodedata.combining('a'), 0)
+		self.assertEqual(unicodedata.combining('⃡'), 230)
+		self.assertEqual(unicodedata.combining('𠀀'), 0)
 
-		self.assertRaises(TypeError, self.db.combining)
-		self.assertRaises(TypeError, self.db.combining, "xx")
+		self.assertRaises(TypeError, unicodedata.combining)
+		self.assertRaises(TypeError, unicodedata.combining, "xx")
 
 	def test_pr29(self):
 		# https://www.unicode.org/review/pr-29.html
 		# See issues #1054943 and #10254.
 		composed = ("େ̀ା", "ᄀ̀ᅡ", "Li̍t-sṳ́", "मार्क ज़" + "ुकेरबर्ग", "किर्गिज़" + "स्तान")
 		for text in composed:
-			self.assertEqual(self.db.normalize("NFC", text), text)
+			self.assertEqual(unicodedata.normalize("NFC", text), text)
 
 	def test_issue10254(self):
 		# Crash reported in #10254
 		a = "C̸" * 20 + "Ç"
 		b = "C̸" * 20 + 'Ç'
-		self.assertEqual(self.db.normalize("NFC", a), b)
+		self.assertEqual(unicodedata.normalize("NFC", a), b)
 
 	def test_issue29456(self):
 		# Fix #29456
@@ -199,12 +200,12 @@ class UnicodeFunctionsTest(UnicodeDatabaseTest):
 		u11a7_str_b = "기ᆧ"
 		u11c3_str_a = "기ᇃ"
 		u11c3_str_b = "기ᇃ"
-		self.assertEqual(self.db.normalize("NFC", u1176_str_a), u1176_str_b)
-		self.assertEqual(self.db.normalize("NFC", u11a7_str_a), u11a7_str_b)
-		self.assertEqual(self.db.normalize("NFC", u11c3_str_a), u11c3_str_b)
+		self.assertEqual(unicodedata.normalize("NFC", u1176_str_a), u1176_str_b)
+		self.assertEqual(unicodedata.normalize("NFC", u11a7_str_a), u11a7_str_b)
+		self.assertEqual(unicodedata.normalize("NFC", u11c3_str_a), u11c3_str_b)
 
 	def test_east_asian_width(self):
-		eaw = self.db.east_asian_width
+		eaw = unicodedata.east_asian_width
 		self.assertRaises(TypeError, eaw, b'a')
 		self.assertRaises(TypeError, eaw, bytearray())
 		self.assertRaises(TypeError, eaw, '')
@@ -218,13 +219,13 @@ class UnicodeFunctionsTest(UnicodeDatabaseTest):
 		self.assertEqual(eaw('𠀀'), 'W')
 
 	def test_east_asian_width_9_0_changes(self):
-		self.assertEqual(self.db.ucd_3_2_0.east_asian_width('⌚'), 'N')
-		self.assertEqual(self.db.east_asian_width('⌚'), 'W')
+		self.assertEqual(unicodedata.ucd_3_2_0.east_asian_width('⌚'), 'N')
+		self.assertEqual(unicodedata.east_asian_width('⌚'), 'W')
 
 
-class UnicodeMiscTest(UnicodeDatabaseTest):
+class UnicodeMiscTest(unittest.TestCase):
 
-	@cpython_only
+	@test.support.cpython_only
 	def test_disallow_instantiation(self):
 		# Ensure that the type disallows instantiation (bpo-43916)
 		self.assertRaises(TypeError, unicodedata.UCD)
@@ -238,7 +239,7 @@ class UnicodeMiscTest(UnicodeDatabaseTest):
 		code = "import sys;sys.modules['unicodedata'] = None;eval(\"'\\\\N{SOFT HYPHEN}'\")"
 		# We use a separate process because the unicodedata module may already
 		# have been loaded in this process.
-		result = script_helper.assert_python_failure("-c", code)
+		result = test.support.script_helper.assert_python_failure("-c", code)
 		error = "SyntaxError: (unicode error) \\N escapes not supported (can't load unicodedata module)"
 		self.assertIn(error, result.err.decode("ascii"))
 
@@ -249,9 +250,9 @@ class UnicodeMiscTest(UnicodeDatabaseTest):
 		count = 0
 		for i in range(0x10000):
 			c = chr(i)
-			dec = self.db.decimal(c, -1)
+			dec = unicodedata.decimal(c, -1)
 			if dec != -1:
-				self.assertEqual(dec, self.db.numeric(c))
+				self.assertEqual(dec, unicodedata.numeric(c))
 				count += 1
 		self.assertTrue(count >= 10)  # should have tested at least the ASCII digits
 
@@ -262,14 +263,14 @@ class UnicodeMiscTest(UnicodeDatabaseTest):
 		count = 0
 		for i in range(0x10000):
 			c = chr(i)
-			dec = self.db.digit(c, -1)
+			dec = unicodedata.digit(c, -1)
 			if dec != -1:
-				self.assertEqual(dec, self.db.numeric(c))
+				self.assertEqual(dec, unicodedata.numeric(c))
 				count += 1
 		self.assertTrue(count >= 10)  # should have tested at least the ASCII digits
 
 	def test_bug_1704793(self):
-		self.assertEqual(self.db.lookup("GOTHIC LETTER FAIHU"), '𐍆')
+		self.assertEqual(unicodedata.lookup("GOTHIC LETTER FAIHU"), '𐍆')
 
 	def test_ucd_510(self):
 		# stdlib
@@ -318,21 +319,42 @@ class NormalizationTest(unittest.TestCase):
 		data = [int(x, 16) for x in data.split(' ')]
 		return ''.join([chr(x) for x in data])
 
-	@requires_resource("network")
+	@test.support.requires_resource("network")
 	def test_normalization(self):
 		TESTDATAFILE = "NormalizationTest.txt"
 		TESTDATAURL = f"http://www.pythontest.net/unicode/{unicodedata.unidata_version}/{TESTDATAFILE}"
 
 		# Hit the exception early
 		try:
-			testdata = open_urlresource(TESTDATAURL, encoding="utf-8", check=self.check_version)
+			url = TESTDATAURL
+			filename = urllib.parse.urlparse(url)[2].split('/')[-1]  # '/': it's URL!
+
+			with TemporaryPathPlus() as tmpdir:
+				fn = tmpdir / filename
+
+				# Verify the requirement before downloading the file
+				test.support.requires("urlfetch")
+				print(f'\tfetching {url} ...')
+
+				with urllib.request.build_opener().open(url, timeout=15) as f:
+					with fn.open("wb") as out:
+						s = f.read()
+						while s:
+							out.write(s)
+							s = f.read()
+
+				with fn.open() as f:
+					if self.check_version(f):
+						f.seek(0)
+						self.run_normalization_tests(f)
+						return
+
+				raise test.support.TestFailed(f'invalid resource {fn!r}')
+
 		except PermissionError:
 			self.skipTest(f"Permission error when downloading {TESTDATAURL} " f"into the test data directory")
 		except (OSError, HTTPException):
 			self.fail(f"Could not retrieve {TESTDATAURL}")
-
-		with testdata:
-			self.run_normalization_tests(testdata)
 
 	def run_normalization_tests(self, testdata):
 		part = None

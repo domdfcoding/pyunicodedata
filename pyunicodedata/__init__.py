@@ -31,7 +31,7 @@ __all__ = ["decimal", "digit", "numeric"]
 MISSING = object()
 
 
-def decimal(chr: str, default=MISSING):  # noqa: A002
+def decimal(chr: str, default=MISSING):  # noqa: A002  # pylint: disable=redefined-builtin
 	"""
 	Returns the decimal value assigned to the character chr as integer.
 
@@ -39,7 +39,6 @@ def decimal(chr: str, default=MISSING):  # noqa: A002
 
 	:param chr:
 	:param default:
-	:return:
 	"""
 
 	# TODO: get_old_record
@@ -54,7 +53,7 @@ def decimal(chr: str, default=MISSING):  # noqa: A002
 	return rc
 
 
-def digit(chr: str, default=MISSING):  # noqa: A002
+def digit(chr: str, default=MISSING):  # noqa: A002  # pylint: disable=redefined-builtin
 	"""
 	Returns the digit value assigned to the character chr as integer.
 
@@ -62,7 +61,6 @@ def digit(chr: str, default=MISSING):  # noqa: A002
 
 	:param chr:
 	:param default:
-	:return:
 	"""
 
 	rc: int = Py_UNICODE_TODIGIT(chr)
@@ -75,7 +73,7 @@ def digit(chr: str, default=MISSING):  # noqa: A002
 	return rc
 
 
-def numeric(chr: str, default=MISSING):  # noqa: A002
+def numeric(chr: str, default=MISSING):  # noqa: A002  # pylint: disable=redefined-builtin
 	"""
 	Returns the numeric value assigned to the character chr as float.
 
@@ -83,7 +81,6 @@ def numeric(chr: str, default=MISSING):  # noqa: A002
 
 	:param chr:
 	:param default:
-	:return:
 	"""
 
 	# TODO: get_old_record

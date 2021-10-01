@@ -1,8 +1,8 @@
 """ Tests for the unicodedata module.
 
-    Written by Marc-Andre Lemburg (mal@lemburg.com).
+	Written by Marc-Andre Lemburg (mal@lemburg.com).
 
-    (c) Copyright CNRI, All Rights Reserved. NO WARRANTY.
+	(c) Copyright CNRI, All Rights Reserved. NO WARRANTY.
 
 """
 
@@ -11,7 +11,7 @@ import hashlib
 import sys
 import unicodedata
 import unittest
-from test.support import requires_resource, script_helper
+from test.support import requires_resource, script_helper  # type: ignore[import]
 
 # this package
 import pyunicodedata
@@ -67,11 +67,7 @@ class UnicodeMethodsTest(unittest.TestCase):
 		self.assertEqual(result, self.expectedchecksum)
 
 
-class UnicodeDatabaseTest(unittest.TestCase):
-	db = pyunicodedata
-
-
-class UnicodeFunctionsTest(UnicodeDatabaseTest):
+class UnicodeFunctionsTest(unittest.TestCase):
 
 	# Update this if the database changes. Make sure to do a full rebuild
 	# (e.g. 'make distclean && make') to get the correct checksum.
@@ -86,9 +82,9 @@ class UnicodeFunctionsTest(UnicodeDatabaseTest):
 			char = chr(i)
 			data = [
 					# Properties
-					format(self.db.digit(char, -1), ".12g"),
-					format(self.db.numeric(char, -1), ".12g"),
-					format(self.db.decimal(char, -1), ".12g"),
+					format(pyunicodedata.digit(char, -1), ".12g"),
+					format(pyunicodedata.numeric(char, -1), ".12g"),
+					format(pyunicodedata.decimal(char, -1), ".12g"),
 					unicodedata.category(char),
 					unicodedata.bidirectional(char),
 					unicodedata.decomposition(char),
@@ -100,44 +96,44 @@ class UnicodeFunctionsTest(UnicodeDatabaseTest):
 		self.assertEqual(result, self.expectedchecksum)
 
 	def test_digit(self):
-		self.assertEqual(self.db.digit('A', None), None)
-		self.assertEqual(self.db.digit('9'), 9)
-		self.assertEqual(self.db.digit('⅛', None), None)
-		self.assertEqual(self.db.digit('⑨'), 9)
-		self.assertEqual(self.db.digit('𠀀', None), None)
-		self.assertEqual(self.db.digit('𝟽'), 7)
+		self.assertEqual(pyunicodedata.digit('A', None), None)
+		self.assertEqual(pyunicodedata.digit('9'), 9)
+		self.assertEqual(pyunicodedata.digit('⅛', None), None)
+		self.assertEqual(pyunicodedata.digit('⑨'), 9)
+		self.assertEqual(pyunicodedata.digit('𠀀', None), None)
+		self.assertEqual(pyunicodedata.digit('𝟽'), 7)
 
-		self.assertRaises(TypeError, self.db.digit)
-		self.assertRaises(TypeError, self.db.digit, "xx")
-		self.assertRaises(ValueError, self.db.digit, 'x')
+		self.assertRaises(TypeError, pyunicodedata.digit)
+		self.assertRaises(TypeError, pyunicodedata.digit, "xx")
+		self.assertRaises(ValueError, pyunicodedata.digit, 'x')
 
 	def test_numeric(self):
-		self.assertEqual(self.db.numeric('A', None), None)
-		self.assertEqual(self.db.numeric('9'), 9)
-		self.assertEqual(self.db.numeric('⅛'), 0.125)
-		self.assertEqual(self.db.numeric('⑨'), 9.0)
-		self.assertEqual(self.db.numeric('꘧'), 7.0)
-		self.assertEqual(self.db.numeric('𠀀', None), None)
-		self.assertEqual(self.db.numeric('𐄪'), 9000)
+		self.assertEqual(pyunicodedata.numeric('A', None), None)
+		self.assertEqual(pyunicodedata.numeric('9'), 9)
+		self.assertEqual(pyunicodedata.numeric('⅛'), 0.125)
+		self.assertEqual(pyunicodedata.numeric('⑨'), 9.0)
+		self.assertEqual(pyunicodedata.numeric('꘧'), 7.0)
+		self.assertEqual(pyunicodedata.numeric('𠀀', None), None)
+		self.assertEqual(pyunicodedata.numeric('𐄪'), 9000)
 
-		self.assertRaises(TypeError, self.db.numeric)
-		self.assertRaises(TypeError, self.db.numeric, "xx")
-		self.assertRaises(ValueError, self.db.numeric, 'x')
+		self.assertRaises(TypeError, pyunicodedata.numeric)
+		self.assertRaises(TypeError, pyunicodedata.numeric, "xx")
+		self.assertRaises(ValueError, pyunicodedata.numeric, 'x')
 
 	def test_decimal(self):
-		self.assertEqual(self.db.decimal('A', None), None)
-		self.assertEqual(self.db.decimal('9'), 9)
-		self.assertEqual(self.db.decimal('⅛', None), None)
-		self.assertEqual(self.db.decimal('⑨', None), None)
-		self.assertEqual(self.db.decimal('𠀀', None), None)
-		self.assertEqual(self.db.decimal('𝟽'), 7)
+		self.assertEqual(pyunicodedata.decimal('A', None), None)
+		self.assertEqual(pyunicodedata.decimal('9'), 9)
+		self.assertEqual(pyunicodedata.decimal('⅛', None), None)
+		self.assertEqual(pyunicodedata.decimal('⑨', None), None)
+		self.assertEqual(pyunicodedata.decimal('𠀀', None), None)
+		self.assertEqual(pyunicodedata.decimal('𝟽'), 7)
 
-		self.assertRaises(TypeError, self.db.decimal)
-		self.assertRaises(TypeError, self.db.decimal, "xx")
-		self.assertRaises(ValueError, self.db.decimal, 'x')
+		self.assertRaises(TypeError, pyunicodedata.decimal)
+		self.assertRaises(TypeError, pyunicodedata.decimal, "xx")
+		self.assertRaises(ValueError, pyunicodedata.decimal, 'x')
 
 
-class UnicodeMiscTest(UnicodeDatabaseTest):
+class UnicodeMiscTest(unittest.TestCase):
 
 	def test_failed_import_during_compiling(self):
 		# Issue 4367
@@ -159,9 +155,9 @@ class UnicodeMiscTest(UnicodeDatabaseTest):
 		count = 0
 		for i in range(0x10000):
 			c = chr(i)
-			dec = self.db.decimal(c, -1)
+			dec = pyunicodedata.decimal(c, -1)
 			if dec != -1:
-				self.assertEqual(dec, self.db.numeric(c))
+				self.assertEqual(dec, pyunicodedata.numeric(c))
 				count += 1
 		self.assertTrue(count >= 10)  # should have tested at least the ASCII digits
 
@@ -172,9 +168,9 @@ class UnicodeMiscTest(UnicodeDatabaseTest):
 		count = 0
 		for i in range(0x10000):
 			c = chr(i)
-			dec = self.db.digit(c, -1)
+			dec = pyunicodedata.digit(c, -1)
 			if dec != -1:
-				self.assertEqual(dec, self.db.numeric(c))
+				self.assertEqual(dec, pyunicodedata.numeric(c))
 				count += 1
 		self.assertTrue(count >= 10)  # should have tested at least the ASCII digits
 

@@ -37,12 +37,11 @@ CASED_MASK = 0x2000
 EXTENDED_CASE_MASK = 0x4000
 
 
-def _PyUnicode_IsTitlecase(ch):
+def _PyUnicode_IsTitlecase(ch: str) -> int:  # pragma: no cover
 	"""
 	Returns 1 for Unicode characters having the category 'Lt', 0 otherwise.
 
 	:param ch:
-	:return:
 	"""
 
 	record = data[index[ord(ch)]]
@@ -50,12 +49,11 @@ def _PyUnicode_IsTitlecase(ch):
 	return flags & TITLE_MASK != 0
 
 
-def _PyUnicode_IsXidStart(ch):
+def _PyUnicode_IsXidStart(ch: str) -> int:  # pragma: no cover
 	"""
 	Returns 1 for Unicode characters having the XID_Start property, 0 otherwise.
 
 	:param ch:
-	:return:
 	"""
 
 	record = data[index[ord(ch)]]
@@ -63,12 +61,11 @@ def _PyUnicode_IsXidStart(ch):
 	return flags & XID_START_MASK != 0
 
 
-def _PyUnicode_IsXidContinue(ch):
+def _PyUnicode_IsXidContinue(ch: str) -> int:  # pragma: no cover
 	"""
 	Returns 1 for Unicode characters having the XID_Continue property, 0 otherwise.
 
 	:param ch:
-	:return:
 	"""
 
 	record = data[index[ord(ch)]]
@@ -77,12 +74,11 @@ def _PyUnicode_IsXidContinue(ch):
 	return flags & XID_CONTINUE_MASK != 0
 
 
-def _PyUnicode_ToDecimalDigit(ch):
+def _PyUnicode_ToDecimalDigit(ch: str) -> int:
 	"""
 	Returns the integer decimal (0-9) for Unicode characters having this property, -1 otherwise.
 
 	:param ch:
-	:return:
 	"""
 
 	record = data[index[ord(ch)]]
@@ -94,11 +90,10 @@ def _PyUnicode_ToDecimalDigit(ch):
 		return -1
 
 
-def _PyUnicode_IsDecimalDigit(ch):
+def _PyUnicode_IsDecimalDigit(ch: str) -> int:  # pragma: no cover
 	"""
 
 	:param ch:
-	:return:
 	"""
 
 	if _PyUnicode_ToDecimalDigit(ch) < 0:
@@ -106,12 +101,11 @@ def _PyUnicode_IsDecimalDigit(ch):
 	return 1
 
 
-def _PyUnicode_ToDigit(ch):
+def _PyUnicode_ToDigit(ch: str) -> int:
 	"""
 	Returns the integer digit (0-9) for Unicode characters having this property, -1 otherwise.
 
 	:param ch:
-	:return:
 	"""
 
 	record = data[index[ord(ch)]]
@@ -123,11 +117,10 @@ def _PyUnicode_ToDigit(ch):
 		return -1
 
 
-def _PyUnicode_IsDigit(ch):
+def _PyUnicode_IsDigit(ch: str) -> int:  # pragma: no cover
 	"""
 
 	:param ch:
-	:return:
 	"""
 
 	if _PyUnicode_ToDigit(ch) < 0:
@@ -135,12 +128,11 @@ def _PyUnicode_IsDigit(ch):
 	return 1
 
 
-def _PyUnicode_IsNumeric(ch):
+def _PyUnicode_IsNumeric(ch: str) -> int:  # pragma: no cover
 	"""
 	Returns the numeric value as double for Unicode characters having this property, -1.0 otherwise.
 
 	:param ch:
-	:return:
 	"""
 
 	record = data[index[ord(ch)]]
@@ -148,7 +140,7 @@ def _PyUnicode_IsNumeric(ch):
 	return flags & NUMERIC_MASK != 0
 
 
-def _PyUnicode_ToNumeric(ch: str):
+def _PyUnicode_ToNumeric(ch: str) -> float:
 	"""
 	Returns the numeric value as double for Unicode characters having this property, -1.0 otherwise.
 	"""
@@ -160,23 +152,23 @@ def _PyUnicode_ToNumeric(ch: str):
 	return -1.0
 
 
-def _PyUnicode_IsPrintable(ch):
+def _PyUnicode_IsPrintable(ch: str) -> int:  # pragma: no cover
 	r"""
 	Returns 1 for Unicode characters to be hex-escaped when repr()ed, 0 otherwise.
 
 	All characters except those characters defined in the Unicode character
 	database as following categories are considered printable.
-	  * Cc (Other, Control)
-	  * Cf (Other, Format)
-	  * Cs (Other, Surrogate)
-	  * Co (Other, Private Use)
-	  * Cn (Other, Not Assigned)
-	  * Zl Separator, Line ('\u2028', LINE SEPARATOR)
-	  * Zp Separator, Paragraph ('\u2029', PARAGRAPH SEPARATOR)
-	  * Zs (Separator, Space) other than ASCII space('\x20').
+
+	* Cc (Other, Control)
+	* Cf (Other, Format)
+	* Cs (Other, Surrogate)
+	* Co (Other, Private Use)
+	* Cn (Other, Not Assigned)
+	* Zl Separator, Line ('\u2028', LINE SEPARATOR)
+	* Zp Separator, Paragraph ('\u2029', PARAGRAPH SEPARATOR)
+	* Zs (Separator, Space) other than ASCII space('\x20').
 
 	:param ch:
-	:return:
 	"""
 
 	record = data[index[ord(ch)]]
@@ -184,12 +176,11 @@ def _PyUnicode_IsPrintable(ch):
 	return flags & PRINTABLE_MASK != 0
 
 
-def _PyUnicode_IsLowercase(ch):
+def _PyUnicode_IsLowercase(ch: str) -> int:  # pragma: no cover
 	"""
 	Returns 1 for Unicode characters having the category 'Ll', 0 otherwise.
 
 	:param ch:
-	:return:
 	"""
 
 	record = data[index[ord(ch)]]
@@ -197,12 +188,11 @@ def _PyUnicode_IsLowercase(ch):
 	return flags & LOWER_MASK != 0
 
 
-def _PyUnicode_IsUppercase(ch):
+def _PyUnicode_IsUppercase(ch: str) -> int:  # pragma: no cover
 	"""
 	Returns 1 for Unicode characters having the category 'Lu', 0 otherwise.
 
 	:param ch:
-	:return:
 	"""
 
 	record = data[index[ord(ch)]]
