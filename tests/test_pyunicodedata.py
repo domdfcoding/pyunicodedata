@@ -19,10 +19,6 @@ import pyunicodedata
 
 class UnicodeMethodsTest(unittest.TestCase):
 
-	# update this, if the database changes
-	expectedchecksum = "fbdf8106a3c7c242086b0a9efa03ad4d30d5b85d"
-
-	@unittest.expectedFailure
 	@requires_resource("cpu")
 	def test_method_checksum(self):
 		h = hashlib.sha1()  # nosec: B303
@@ -64,16 +60,16 @@ class UnicodeMethodsTest(unittest.TestCase):
 					]
 			h.update(''.join(data).encode("utf-8", "surrogatepass"))
 		result = h.hexdigest()
-		self.assertEqual(result, self.expectedchecksum)
+
+		if sys.version_info[:2] == (3, 8):
+			self.assertEqual(result, "e728278035eb76cf92d86f07852266b0433f16a5")
+		elif sys.version_info[:2] >= (3, 9):
+			# Update this from CPython if the database changes.
+			self.assertEqual(result, "fbdf8106a3c7c242086b0a9efa03ad4d30d5b85d")
 
 
 class UnicodeFunctionsTest(unittest.TestCase):
 
-	# Update this if the database changes. Make sure to do a full rebuild
-	# (e.g. 'make distclean && make') to get the correct checksum.
-	expectedchecksum = "d1e37a2854df60ac607b47b51189b9bf1b54bfdb"
-
-	@unittest.expectedFailure
 	@requires_resource("cpu")
 	def test_function_checksum(self):
 		h = hashlib.sha1()  # nosec: B303
@@ -93,7 +89,12 @@ class UnicodeFunctionsTest(unittest.TestCase):
 					]
 			h.update(''.join(data).encode("ascii"))
 		result = h.hexdigest()
-		self.assertEqual(result, self.expectedchecksum)
+
+		if sys.version_info[:2] == (3, 8):
+			self.assertEqual(result, "417249d799929ac756bac3faf9d5601bea36df57")
+		elif sys.version_info[:2] >= (3, 9):
+			# Update this from CPython if the database changes.
+			self.assertEqual(result, "d1e37a2854df60ac607b47b51189b9bf1b54bfdb")
 
 	def test_digit(self):
 		self.assertEqual(pyunicodedata.digit('A', None), None)
