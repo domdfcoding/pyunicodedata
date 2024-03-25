@@ -987,7 +987,7 @@ def expand_range(char_range: str) -> Iterator[int]:
       https://www.unicode.org/reports/tr44/#Code_Point_Ranges
     '''
 	if ".." in char_range:
-		first, last = [int(c, 16) for c in char_range.split("..")]
+		first, last = (int(c, 16) for c in char_range.split(".."))
 	else:
 		first = last = int(char_range, 16)
 	yield from range(first, last + 1)
