@@ -39,3 +39,4 @@ classifiers:
 tox_unmanaged:
  - flake8
  - testenv
+ - check-wheel-contents
