@@ -22,9 +22,6 @@ from domdf_python_tools.paths import TemporaryPathPlus
 
 class UnicodeMethodsTest(unittest.TestCase):
 
-	# update this, if the database changes
-	expectedchecksum = "fbdf8106a3c7c242086b0a9efa03ad4d30d5b85d"
-
 	@test.support.requires_resource("cpu")
 	def test_method_checksum(self):
 		h = hashlib.sha1()  # nosec: B303
@@ -69,16 +66,18 @@ class UnicodeMethodsTest(unittest.TestCase):
 
 		if sys.version_info[:2] == (3, 8):
 			self.assertEqual(result, "e728278035eb76cf92d86f07852266b0433f16a5")
-		elif sys.version_info[:2] >= (3, 9):
+		elif sys.version_info[:2] == (3, 11):
+			self.assertEqual(result, "4739770dd4d0e5f1b1677accfc3552ed3c8ef326")
+		elif sys.version_info[:2] == (3, 12):
+			self.assertEqual(result, "e708c31c0d51f758adf475cb7201cf80917362be")
+		elif sys.version_info[:2] >= (3, 13):
 			# Update this from CPython if the database changes.
+			self.assertEqual(result, "63aa77dcb36b0e1df082ee2a6071caeda7f0955e")
+		elif sys.version_info[:2] >= (3, 9):
 			self.assertEqual(result, "fbdf8106a3c7c242086b0a9efa03ad4d30d5b85d")
 
 
 class UnicodeFunctionsTest(unittest.TestCase):
-
-	# Update this if the database changes. Make sure to do a full rebuild
-	# (e.g. 'make distclean && make') to get the correct checksum.
-	expectedchecksum = "d1e37a2854df60ac607b47b51189b9bf1b54bfdb"
 
 	@test.support.requires_resource("cpu")
 	def test_function_checksum(self):
@@ -102,8 +101,14 @@ class UnicodeFunctionsTest(unittest.TestCase):
 
 		if sys.version_info[:2] == (3, 8):
 			self.assertEqual(result, "4bcbf9df344114b1ebc95b904f4352dd250dff7e")
-		elif sys.version_info[:2] >= (3, 9):
+		elif sys.version_info[:2] == (3, 11):
+			self.assertEqual(result, "98d602e1f69d5c5bb8a5910c40bbbad4e18e8370")
+		elif sys.version_info[:2] == (3, 12):
+			self.assertEqual(result, "42d326b3db43e0984ae6a6db02b51f4cc45f4364")
+		elif sys.version_info[:2] >= (3, 13):
 			# Update this from CPython if the database changes.
+			self.assertEqual(result, "f578eba167fdb18d559b029fcef2b3ed98c64f13")
+		elif sys.version_info[:2] >= (3, 9):
 			self.assertEqual(result, "d1e37a2854df60ac607b47b51189b9bf1b54bfdb")
 
 	def test_digit(self):

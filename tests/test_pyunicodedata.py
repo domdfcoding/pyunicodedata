@@ -63,8 +63,14 @@ class UnicodeMethodsTest(unittest.TestCase):
 
 		if sys.version_info[:2] == (3, 8):
 			self.assertEqual(result, "e728278035eb76cf92d86f07852266b0433f16a5")
-		elif sys.version_info[:2] >= (3, 9):
+		elif sys.version_info[:2] == (3, 11):
+			self.assertEqual(result, "4739770dd4d0e5f1b1677accfc3552ed3c8ef326")
+		elif sys.version_info[:2] == (3, 12):
+			self.assertEqual(result, "e708c31c0d51f758adf475cb7201cf80917362be")
+		elif sys.version_info[:2] >= (3, 13):
 			# Update this from CPython if the database changes.
+			self.assertEqual(result, "63aa77dcb36b0e1df082ee2a6071caeda7f0955e")
+		elif sys.version_info[:2] >= (3, 9):
 			self.assertEqual(result, "fbdf8106a3c7c242086b0a9efa03ad4d30d5b85d")
 
 
@@ -92,8 +98,14 @@ class UnicodeFunctionsTest(unittest.TestCase):
 
 		if sys.version_info[:2] == (3, 8):
 			self.assertEqual(result, "417249d799929ac756bac3faf9d5601bea36df57")
-		elif sys.version_info[:2] >= (3, 9):
+		elif sys.version_info[:2] == (3, 11):
+			self.assertEqual(result, "63bc6ce2f302c7fcfc20c381f2790b550b92a870")
+		elif sys.version_info[:2] == (3, 12):
+			self.assertEqual(result, "e2b4d9c97d5f05a8bc8d50550145b5142354efc8")
+		elif sys.version_info[:2] >= (3, 13):
 			# Update this from CPython if the database changes.
+			self.assertEqual(result, "53dc045369330865087e35f4808496ee84423e92")
+		elif sys.version_info[:2] >= (3, 9):
 			self.assertEqual(result, "d1e37a2854df60ac607b47b51189b9bf1b54bfdb")
 
 	def test_digit(self):
