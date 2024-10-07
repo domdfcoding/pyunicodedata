@@ -395,7 +395,7 @@ class NormalizationTest(unittest.TestCase):
 			if line.startswith("@Part"):
 				part = line.split()[0]
 				continue
-			c1, c2, c3, c4, c5 = [self.unistr(x) for x in line.split(';')[:-1]]
+			c1, c2, c3, c4, c5 = (self.unistr(x) for x in line.split(';')[:-1])
 
 			# Perform tests
 			self.assertTrue(c2 == NFC(c1) == NFC(c2) == NFC(c3), line)
