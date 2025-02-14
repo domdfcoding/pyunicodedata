@@ -365,8 +365,8 @@ class NormalizationTest(unittest.TestCase):
 				raise test.support.TestFailed(f'invalid resource {fn!r}')
 
 		except PermissionError:
-			self.skipTest(f"Permission error when downloading {TESTDATAURL} "
-							f"into the test data directory")
+			msg = f"Permission error when downloading {TESTDATAURL} into the test data directory"
+			self.skipTest(msg)
 		except (OSError, HTTPException):
 			self.fail(f"Could not retrieve {TESTDATAURL}")
 
