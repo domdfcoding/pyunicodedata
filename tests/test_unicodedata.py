@@ -9,7 +9,7 @@
 # stdlib
 import hashlib
 import sys
-import test.support  # type: ignore[import]
+import test.support  # type: ignore[import-not-found]
 import unicodedata
 import unittest
 import urllib.parse
