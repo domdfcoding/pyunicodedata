@@ -92,6 +92,7 @@ def _PyUnicode_ToDecimalDigit(ch: str) -> int:
 
 def _PyUnicode_IsDecimalDigit(ch: str) -> int:  # pragma: no cover
 	"""
+	Returns whether the string is decimal digits.
 
 	:param ch:
 	"""
@@ -119,6 +120,7 @@ def _PyUnicode_ToDigit(ch: str) -> int:
 
 def _PyUnicode_IsDigit(ch: str) -> int:  # pragma: no cover
 	"""
+	Returns whether the string is digits.
 
 	:param ch:
 	"""
