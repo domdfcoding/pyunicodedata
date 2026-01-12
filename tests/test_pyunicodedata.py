@@ -11,7 +11,10 @@ import hashlib
 import sys
 import unicodedata
 import unittest
-from test.support import requires_resource, script_helper  # type: ignore[import-not-found,import-untyped,unused-ignore]
+from test.support import (  # type: ignore[import-not-found,import-untyped,unused-ignore]
+		requires_resource,
+		script_helper
+		)
 
 # this package
 import pyunicodedata
