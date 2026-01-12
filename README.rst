@@ -89,11 +89,11 @@ pyunicodedata
 	:target: https://github.com/domdfcoding/pyunicodedata/commit/master
 	:alt: GitHub last commit
 
-.. |maintained| image:: https://img.shields.io/maintenance/yes/2025
+.. |maintained| image:: https://img.shields.io/maintenance/yes/2026
 	:alt: Maintenance
 
 .. |pypi-downloads| image:: https://img.shields.io/pypi/dm/pyunicodedata
-	:target: https://pypi.org/project/pyunicodedata/
+	:target: https://pypistats.org/packages/pyunicodedata
 	:alt: PyPI - Downloads
 
 .. end shields
