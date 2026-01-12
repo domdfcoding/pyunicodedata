@@ -9,7 +9,7 @@
 # stdlib
 import hashlib
 import sys
-import test.support  # type: ignore[import-not-found]
+import test.support  # type: ignore[import-not-found,import-untyped,unused-ignore]
 import unicodedata
 import unittest
 import urllib.parse
@@ -301,9 +301,13 @@ class UnicodeMiscTest(unittest.TestCase):
 	def test_bug_5828(self):
 		self.assertEqual('ᵹ'.lower(), 'ᵹ')
 		# Only U+0000 should have U+0000 as its upper/lower/titlecase variant
-		self.assertEqual([
-				c for c in range(sys.maxunicode + 1) if '\x00' in chr(c).lower() + chr(c).upper() + chr(c).title()
-				], [0])
+		self.assertEqual(
+				[
+						c for c in range(sys.maxunicode + 1)
+						if '\x00' in chr(c).lower() + chr(c).upper() + chr(c).title()
+						],
+				[0],
+				)
 
 	def test_bug_4971(self):
 		# LETTER DZ WITH CARON: DZ, Dz, dz
