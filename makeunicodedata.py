@@ -100,7 +100,7 @@ CATEGORY_NAMES = [
 		"Sm",
 		"Sc",
 		"Sk",
-		"So"
+		"So",
 		]
 
 BIDIRECTIONAL_NAMES = [
@@ -127,7 +127,7 @@ BIDIRECTIONAL_NAMES = [
 		"LRI",
 		"RLI",
 		"FSI",
-		"PDI"
+		"PDI",
 		]
 
 EASTASIANWIDTH_NAMES = ['F', 'H', 'W', "Na", 'A', 'N']
@@ -838,13 +838,13 @@ def makeunicodename(unicode, trace):
                 int seqlen;
                 Py_UCS2 seq[4];
             } named_sequence;
-            """
-						)
+            """,
+						),
 				)
 
 		fprint(f"static const unsigned int named_sequences_start = {NAMED_SEQUENCES_START:#x};")
 		fprint(
-				f"static const unsigned int named_sequences_end = {NAMED_SEQUENCES_START + len(unicode.named_sequences):#x};"
+				f"static const unsigned int named_sequences_end = {NAMED_SEQUENCES_START + len(unicode.named_sequences):#x};",
 				)
 
 		fprint("static const named_sequence named_sequences[] = {")
@@ -952,10 +952,10 @@ def merge_old_version(version, new, old):
 							decimal_changes,
 							mirrored_changes,
 							east_asian_width_changes,
-							numeric_changes
-							)
+							numeric_changes,
+							),
 					),
-			normalization_changes
+			normalization_changes,
 			))
 
 
@@ -1252,9 +1252,31 @@ def myhash(s, magic):
 	return h
 
 
-SIZES = [(4, 3), (8, 3), (16, 3), (32, 5), (64, 3), (128, 3), (256, 29), (512, 17), (1024, 9), (2048, 5),
-			(4096, 83), (8192, 27), (16384, 43), (32768, 3), (65536, 45), (131072, 9), (262144, 39), (524288, 39),
-			(1048576, 9), (2097152, 5), (4194304, 3), (8388608, 33), (16777216, 27)]
+SIZES = [
+		(4, 3),
+		(8, 3),
+		(16, 3),
+		(32, 5),
+		(64, 3),
+		(128, 3),
+		(256, 29),
+		(512, 17),
+		(1024, 9),
+		(2048, 5),
+		(4096, 83),
+		(8192, 27),
+		(16384, 43),
+		(32768, 3),
+		(65536, 45),
+		(131072, 9),
+		(262144, 39),
+		(524288, 39),
+		(1048576, 9),
+		(2097152, 5),
+		(4194304, 3),
+		(8388608, 33),
+		(16777216, 27),
+		]
 
 
 class Hash:
