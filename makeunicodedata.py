@@ -969,9 +969,9 @@ def open_data(template, version):
 		import urllib.request
 		if version == "3.2.0":
 			# irregular url structure
-			url = f"{('https://www.unicode.org/Public/3.2-Update/' + template)}{('-' + version,)}"
+			url = ("https://www.unicode.org/Public/3.2-Update/" + template) % ('-' + version, )
 		else:
-			url = f"{('https://www.unicode.org/Public/%s/ucd/' + template)}{(version, '')}"
+			url = ("https://www.unicode.org/Public/%s/ucd/" + template) % (version, '')
 		os.makedirs(DATA_DIR, exist_ok=True)
 		urllib.request.urlretrieve(url, filename=local)
 	if local.endswith(".txt"):
